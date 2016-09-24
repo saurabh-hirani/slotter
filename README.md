@@ -64,7 +64,7 @@ Python library to slot items into pre-defined slots.
   print "=================================="
 
   print "Dumpable ds - reverse"
-  print json.dumps(s.dump(reverse=True), indent=2)
+  print json.dumps(s.dump(reverse=True), indent=2) # flip key values
   print "=================================="
   ```
 

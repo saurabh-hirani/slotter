@@ -53,5 +53,5 @@ print json.dumps(s.dump(), indent=2) # return a json dumpable version of the ds
 print "=================================="
 
 print "Dumpable ds - reverse"
-print json.dumps(s.dump(reverse=True), indent=2)
+print json.dumps(s.dump(reverse=True), indent=2) # flip key values
 print "=================================="
