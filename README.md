@@ -1,8 +1,6 @@
-Slot things into buckets.
-
 ### Introduction
 
-Slotter provides a library to bucketize items into pre-defined slots
+Python library to Slot items into pre-defined slots.
 
 ### Installation - TODO
 
