@@ -39,8 +39,8 @@ Python library to Slot items into pre-defined slots.
 
   print "Target slot of 11"
   target_slot = s.find_slot(11) # in which slot has 5 been added
-  print "Is 11 in the same target slot?"
-  print 11 in target_slot
+  print "Is 15 in the same target slot?"
+  print 15 in target_slot
   print "=================================="
 
   print "All slots"
@@ -80,7 +80,7 @@ Python library to Slot items into pre-defined slots.
   Target slot str representation - 1-10
   ==================================
   Target slot of 11
-  Is 11 in the same target slot?
+  Is 15 in the same target slot?
   True
   ==================================
   All slots
