@@ -6,76 +6,113 @@ Slotter provides a library to bucketize items into pre-defined slots
 
 ### Installation - TODO
 
-### Basic usage examples
+### Examples
 
-- Create slotter
+- Sample code:
 
   ```
+  #!/usr/bin/env python
+
+  import json
   import slotter
 
-  slots = slotter.create()
+  # Create the slotter
+  s = slotter.create()
+
+  # Add slots to put items in
+  s.add_slot(1,10)
+  s.add_slot(10,20)
+
+  # Add items
+  s.add_item(5)
+  s.add_item(11)
+  s.add_item(15)
+
+  print "Has 5 been slotted"
+  print s.slotted(5)   # has 5 been added
+  print "=================================="
+
+  print "Target slot of 5"
+  target_slot = s.find_slot(5) # in which slot has 5 been added
+  print "Target slot start - %s" % str(target_slot.start)
+  print "Target slot end - %s" % str(target_slot.end)
+  print "Target slot str representation - %s" % str(target_slot)
+  print "=================================="
+
+  print "Target slot of 11"
+  target_slot = s.find_slot(11) # in which slot has 5 been added
+  print "Is 11 in the same target slot?"
+  print 11 in target_slot
+  print "=================================="
+
+  print "All slots"
+  print s.slots
+  print "=================================="
+
+  print "All items"
+  print s.items
+  print "=================================="
+
+  print "All slot items"
+  print s.slot_items # return dictionary of slot -> items
+  print "=================================="
+
+  print "All item slots"
+  print s.item_slots # return dictionary of item -> slots
+  print "=================================="
+
+  print "Dumpable ds"
+  print json.dumps(s.dump(), indent=2) # return a json dumpable version of the ds
+  print "=================================="
+
+  print "Dumpable ds - reverse"
+  print json.dumps(s.dump(reverse=True), indent=2)
+  print "=================================="
   ```
 
-- Define the slots:
+- Sample code output
 
   ```
-  slots.add(start=1, end=10)  # >= 1 and < 10
-
-  slots.add(start=10, end=20) # >= 10 and < 20
-
-  slots.add(start=20) # >= 10 to infinity
-  ```
-
-- Define the slots during creation itself:
-
-  ```
-  import slotter
-
-  slots = slotter.create([(1, 10), (10, 20), (20,)])
-  ```
-
-- Add elements:
-
-  ```
-  low, high = slots.put(5) # slots and returns True
-
-  print low
-  >> 1
-
-  print high
-  >> 10
-
-  low, high = slots.put(10)
-
-  print low
-  >> 10
-
-  low, high = slots.put(15)
-
-  low, high = slots.put(-1) # returns (None, None)
-  ```
-
-- Dump the slotted elements
-
-  ```
-  slots.dump()
+  Has 5 been slotted
+  True
+  ==================================
+  Target slot of 5
+  Target slot start - 1
+  Target slot end - 10
+  Target slot str representation - 1-10
+  ==================================
+  Target slot of 11
+  Is 11 in the same target slot?
+  True
+  ==================================
+  All slots
+  [<slotter.slotter.Slot object at 0x7f6b1c4f2b50>, <slotter.slotter.Slot object at 0x7f6b1c4f2c10>]
+  ==================================
+  All items
+  [5, 11, 15]
+  ==================================
+  All slot items
+  {<slotter.slotter.Slot object at 0x7f6b1c4f2c10>: [11, 15], <slotter.slotter.Slot object at 0x7f6b1c4f2b50>: [5]}
+  ==================================
+  All item slots
+  {11: <slotter.slotter.Slot object at 0x7f6b1c4f2c10>, 5: <slotter.slotter.Slot object at 0x7f6b1c4f2b50>, 15: <slotter.slotter.Slot object at 0x7f6b1c4f2c10>}
+  ==================================
+  Dumpable ds
   {
-    (1,10): [5]
-    (10,20): [10, 15]
+    "1-10": [
+      5
+    ],
+    "10-20": [
+      11,
+      15
+    ]
   }
-
-  slots.dump(keystrs=True)
+  ==================================
+  Dumpable ds - reverse
   {
-    '1-10': [5]
-    '10-20': [10, 15]
+    "11": "10-20",
+    "15": "10-20",
+    "5": "1-10"
   }
-
-  slots.dump(reverse=True)
-
-  {
-    '5': (1,10),
-    '10': (10, 20),
-    '15': (10, 20),
-    '150': (20, None),
-  }
+  ==================================
   ```

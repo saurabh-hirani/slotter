@@ -70,7 +70,9 @@ class Slotter(object):
         return None
 
       if slot not in self.slot_items:
-        self.slot_items[slot] = item
+        self.slot_items[slot] = []
+
+      self.slot_items[slot].append(item)
 
       self.item_slots[item] = slot
 
@@ -87,13 +89,14 @@ class Slotter(object):
     """ Dump the slotted ds """
     ds = {}
     if not reverse:
-      for slot in self.slot_items:
-        print slot
-        ds[str(slot)] = str(self.slot_items[slot])
+      for slot in self.slot_items.keys():
+        str_slot = str(slot)
+        if str_slot not in ds:
+          ds[str_slot] = []
+        ds[str_slot].extend(self.slot_items[slot])
       return ds
 
-    for item in self.item_slots:
-      slots = self.item_slots[item]
-      ds[str(item)] = [str(s) for s in self.item_slots[item]]
+    for item in self.item_slots.keys():
+      ds[str(item)] = str(self.item_slots[item])
 
     return ds
