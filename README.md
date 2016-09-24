@@ -1,6 +1,6 @@
 ### Introduction
 
-Python library to Slot items into pre-defined slots.
+Python library to slot items into pre-defined slots.
 
 ### Installation - TODO
 
