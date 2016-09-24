@@ -6,7 +6,7 @@ Python library to slot items into pre-defined slots.
 
 ### Examples
 
-- Sample code:
+- ```cat sample.py```
 
   ```
   #!/usr/bin/env python
@@ -68,7 +68,7 @@ Python library to slot items into pre-defined slots.
   print "=================================="
   ```
 
-- Sample code output
+- Output
 
   ```
   Has 5 been slotted
