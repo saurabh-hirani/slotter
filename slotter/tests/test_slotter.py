@@ -11,7 +11,7 @@ def slotter_obj():
 def test_create(slotter_obj):
   assert isinstance(slotter_obj, slotter.Slotter)
 
-def test_numerical_slots(slotter_obj):
+def test_add_slot(slotter_obj):
   added = slotter_obj.add_slot(1, 10)
   assert added
   assert slotter_obj.slots[0].start == 1
