@@ -15,7 +15,7 @@ s.add_item(5)
 s.add_item(11)
 s.add_item(15)
 
-print "Has 5 been slotted"
+print "Has 5 been slotted?"
 print s.slotted(5)   # has 5 been added
 print "=================================="
 

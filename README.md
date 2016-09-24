@@ -2,6 +2,20 @@
 
 Python library to slot items into pre-defined slots.
 
+### Why?
+
+Scratching my own itch.
+
+Had written a function that takes a list of time ranges, a list of times (seconds) and slots them in the appropriate ranges. Abstracted that out into a module.
+
+### An interesting use case
+
+Talk to your monitoring setup's API. Find out how many services are in warning/critical state and for how long. Keep on collecting, slotting (use this module) and plotting this data for X hours. You get an insight into your alert response times.
+
+e.g. X services were in WARNING state for 1-2 hours.
+
+Watch for a blog post demoing this within a week on [my blog](http://saurabh-hirani.github.io/writing/)
+
 ### Installation - TODO
 
 ### Examples
@@ -26,7 +40,7 @@ Python library to slot items into pre-defined slots.
   s.add_item(11)
   s.add_item(15)
 
-  print "Has 5 been slotted"
+  print "Has 5 been slotted?"
   print s.slotted(5)   # has 5 been added
   print "=================================="
 
