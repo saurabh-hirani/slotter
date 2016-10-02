@@ -20,111 +20,121 @@ Watch for a blog post demoing this within a week on [my blog](http://saurabh-hir
 
 ### Examples
 
-- ```cat sample.py```
+- If you want to run all of the following examples in one shot:
 
   ```
-  #!/usr/bin/env python
+  $ python sample.py
+  ```
 
-  import json
+- Import the slotter module
+
+  ```
   import slotter
+  ```
 
-  # Create the slotter
+- Create that which will slot items
+
+  ```
   s = slotter.create()
+  ```
 
-  # Add slots to put items in
+- Add slots which will hold items
+
+  ```
   s.add_slot(1,10)
   s.add_slot(10,20)
+  ```
 
+- Add items
+
+  ```
   # Add items
   s.add_item(5)
   s.add_item(11)
   s.add_item(15)
+  ```
 
-  print "Has 5 been slotted?"
+- Check slots, items, etc.
+
+  ```
   print s.slotted(5)
-  print "=================================="
+  >> True
+  ```
 
-  print "Target slot of 5"
+- Find the target slot of an item:
+
+  ```
   target_slot = s.find_slot(5)
-  print "Target slot start - %s" % str(target_slot.start)
-  print "Target slot end - %s" % str(target_slot.end)
-  print "Target slot str representation - %s" % str(target_slot)
-  print "=================================="
+  print str(target_slot.start)
+  >> 1
+  print str(target_slot.end)
+  >> 10
+  print str(target_slot)
+  >> 1-10
+  ```
 
-  print "Target slot of 11"
+  ```
   target_slot = s.find_slot(11)
-  print "Is 15 in the same target slot?"
+  print str(target_slot.start)
+  >> 10
+  print str(target_slot.end)
+  >> 20
   print 15 in target_slot
-  print "=================================="
+  >> True
+  ```
 
-  print "All slots"
+- Get all slots
+
+  ```
   print s.slots
-  print "=================================="
+  >> [<slotter.slotter.Slot object at 0x7f1af93a7a90>, <slotter.slotter.Slot object at 0x7f1af93a7b50>]
+  ```
 
-  print "All items"
+- Get all items
+
+  ```
   print s.items
-  print "=================================="
+  >> [5, 11, 15]
+  ```
 
-  print "All slot items"
-  print s.slot_items # slot -> items dictionary
-  print "=================================="
+- Map slots to items
 
-  print "All item slots"
-  print s.item_slots # item -> slots dictionary
-  print "=================================="
+  ```
+  print s.slot_items
+  >> {<slotter.slotter.Slot object at 0x7f1af93a7a90>: [5], <slotter.slotter.Slot object at 0x7f1af93a7b50>: [11, 15]}
+  ```
 
-  print "Dumpable ds"
+- Map items to slots
+
+  ```
+  print s.item_slots
+  >> {11: <slotter.slotter.Slot object at 0x7f1af93a7b50>, 5: <slotter.slotter.Slot object at 0x7f1af93a7a90>, 15: <slotter.slotter.Slot object at 0x7f1af93a7b50>}
+  ```
+
+- json dump slot_items map:
+
+  ```
+  import json
   print json.dumps(s.dump(), indent=2)
-  print "=================================="
-
-  print "Dumpable ds - reverse"
-  print json.dumps(s.dump(reverse=True), indent=2) # flip key values
-  print "=================================="
-  ```
-
-- Output
-
-  ```
-  Has 5 been slotted
-  True
-  ==================================
-  Target slot of 5
-  Target slot start - 1
-  Target slot end - 10
-  Target slot str representation - 1-10
-  ==================================
-  Target slot of 11
-  Is 15 in the same target slot?
-  True
-  ==================================
-  All slots
-  [<slotter.slotter.Slot object at 0x7f6b1c4f2b50>, <slotter.slotter.Slot object at 0x7f6b1c4f2c10>]
-  ==================================
-  All items
-  [5, 11, 15]
-  ==================================
-  All slot items
-  {<slotter.slotter.Slot object at 0x7f6b1c4f2c10>: [11, 15], <slotter.slotter.Slot object at 0x7f6b1c4f2b50>: [5]}
-  ==================================
-  All item slots
-  {11: <slotter.slotter.Slot object at 0x7f6b1c4f2c10>, 5: <slotter.slotter.Slot object at 0x7f6b1c4f2b50>, 15: <slotter.slotter.Slot object at 0x7f6b1c4f2c10>}
-  ==================================
-  Dumpable ds
   {
     "1-10": [
-      5
-    ],
+        5
+      ],
     "10-20": [
-      11,
-      15
-    ]
+        11,
+        15
+      ]
   }
-  ==================================
-  Dumpable ds - reverse
+  ```
+
+- json dump item_slots map:
+
+  ```
+  import json
+  print json.dumps(s.dump(reverse=True), indent=2)
   {
     "11": "10-20",
     "15": "10-20",
     "5": "1-10"
   }
-  ==================================
   ```

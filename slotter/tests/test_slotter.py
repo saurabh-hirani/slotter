@@ -1,7 +1,7 @@
+import itertools
 import pytest
 import slotter
 from slotter.slotter import SlotterException
-import itertools
 
 @pytest.fixture(scope='session')
 def slotter_obj():

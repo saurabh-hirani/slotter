@@ -5,6 +5,7 @@ class SlotterException(Exception):
   pass
 
 class Slot(object):
+  """ That which contains items """
   def __init__(self, start, end):
     self.start = start
     self.end = end
