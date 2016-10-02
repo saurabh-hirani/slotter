@@ -14,8 +14,6 @@ Talk to your monitoring setup's API. Find out how many services are in warning/c
 
 e.g. X services were in WARNING state for 1-2 hours.
 
-Watch for a blog post demoing this within a week on [my blog](http://saurabh-hirani.github.io/writing/)
-
 ### Installation - TODO
 
 ### Examples
