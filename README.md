@@ -14,6 +14,8 @@ Talk to your monitoring setup's API. Find out how many services are in warning/c
 
 e.g. X services were in WARNING state for 1-2 hours.
 
+[This](https://github.com/saurabh-hirani/graphite-plugins/tree/master/icinga2_plugins) repo shows an application of this use case for icinga2 as the monitoring system and graphite as the graphing system.
+
 ### Installation
 
 * stable release: ```pip install slotter```
