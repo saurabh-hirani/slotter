@@ -31,10 +31,10 @@ class Slotter(object):
 
   def __init__(self, slots=None):
     """ Create the slots object """
+    self.slots = sortedset(key=lambda x: x.start + x.end)
     if slots is not None:
-      self.slots = sortedset(slots)
-    else:
-      self.slots = sortedset()
+      for slot in slots:
+        self.slots.add(slot)
     self._str_slots = {}
     self.items = sortedset(key = lambda x: x[1])
     self.item_slots = {}

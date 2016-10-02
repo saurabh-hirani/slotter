@@ -26,13 +26,13 @@ def test_create_slot(slotter_obj):
 
 def test_add_slot(slotter_obj):
   """ Test slot creation """
-  slot_obj = slotter_obj.add_slot(1, 10)
+  slot_obj = slotter_obj.add_slot(20, 30, 'third')
   assert slot_obj
 
   slot_obj = slotter_obj.add_slot(10, 20)
   assert slot_obj
 
-  slot_obj = slotter_obj.add_slot(20, 30, 'third')
+  slot_obj = slotter_obj.add_slot(1, 10)
   assert slot_obj
 
 def test_remove_slot(slotter_obj):
@@ -83,7 +83,7 @@ def test_remove_item(slotter_obj):
 def test_get_slots(slotter_obj):
   """ Test getting an item's slot """
   all_slots = slotter_obj.get_slots()
-  assert len(all_slots) == 3 # from test_add_slot
+  assert [str(x) for x in all_slots] == ['1-10', '10-20', 'third']
 
   slot = slotter_obj.get_slots('fifteen', 15)
   assert slot.start == 10

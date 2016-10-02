@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 setup(
   name='slotter',
   license='MIT',
-  version='0.0.3',
+  version='0.0.4',
   url='https://github.com/saurabh-hirani/slotter',
   description=('Python library to slot stuff'),
   author='Saurabh Hirani',

@@ -62,11 +62,11 @@ e.g. X services were in WARNING state for 1-2 hours.
   >>> <slotter.slotter.Slot at 0x3>
   ```
 
-- Dump the empty slot objects. Slots are objects stored in a sorted set. Their order is not guaranteed.
+- Dump the empty slot objects. Returns a sorted list. Slots are sorted on the sum of start + end i.e. slot(1, 10) <  slot(10, 20)
 
   ```
   s.get_slots()
-  >>> [<slotter.slotter.Slot object at 0x1>, <slotter.slotter.Slot object at 0x0>, <slotter.slotter.Slot at 0x2>]
+  >>> [<slotter.slotter.Slot object at 0x0>, <slotter.slotter.Slot object at 0x1>, <slotter.slotter.Slot at 0x2>]
   ```
 
 - Dump in human readable form (if you fancy json dumps)
@@ -122,7 +122,7 @@ e.g. X services were in WARNING state for 1-2 hours.
   >>> 'twenty-to-thirty'
   ```
 
-- Get all the slotted items. Items are sorted. Because you may want to query on items - how many items > X?
+- Get all the slotted items. Returns a sorted list.
 
   ```
   # get all items
