@@ -20,12 +20,6 @@ Watch for a blog post demoing this within a week on [my blog](http://saurabh-hir
 
 ### Examples
 
-- If you want to run all of the following examples in one shot:
-
-  ```
-  $ python sample.py
-  ```
-
 - Import the slotter module
 
   ```
@@ -41,100 +35,125 @@ Watch for a blog post demoing this within a week on [my blog](http://saurabh-hir
 - Add slots which will hold items
 
   ```
-  s.add_slot(1,10)
-  s.add_slot(10,20)
+  s.add_slot(1, 10)
+  >>> <slotter.slotter.Slot at 0x0>
+
+  # adding same slot is idempotent
+  s.add_slot(1, 10)
+  >>> <slotter.slotter.Slot at 0x0>
+
+  s.add_slot(10, 20)
+  >>> <slotter.slotter.Slot at 0x2>
+
+  # an optional description to label the slots
+  s.add_slot(20, 30, 'third')
+  >>> <slotter.slotter.Slot at 0x3>
   ```
 
-- Add items
+- Dump the empty slot objects. Slots are objects stored in a sorted set. Their order is not guaranteed.
 
   ```
-  # Add items
+  s.get_slots()
+  >>> [<slotter.slotter.Slot object at 0x1>, <slotter.slotter.Slot object at 0x0>, <slotter.slotter.Slot at 0x2>]
+  ```
+
+- Dump in human readable form (if you fancy json dumps)
+
+  ```
+  s.dump()
+  >>> {'1-10': [], '10-20': [], 'third': []} # printed 'third' because we labelled (20, 30) range explicitly
+  ```
+
+- Get properties of a sample slot
+
+  ```
+  s.slots[0].start
+  >>> 10
+  s.slots[0].end
+  >>> 20
+  ```
+
+- Add items. Slots chosen as per item >= slot.start and item < slot.end. Output is the slot in which items are added
+
+  ```
   s.add_item(5)
-  s.add_item(11)
-  s.add_item(15)
+  >>> <slotter.slotter.Slot object at 0x1>
+
+  s.add_item(20)
+  >>> <slotter.slotter.Slot object at 0x3>
+
+  slot = s.add_item(11)
+  >>> <slotter.slotter.Slot object at 0x2>
+
+  # add same item again is idempotent
+  slot = s.add_item(11)
+  >>> <slotter.slotter.Slot object at 0x2>
+
+  # 0x2 == slot with range (10,20) - not explicitly labelled => label == 'start-end'
+  str(slot)
+  >>> '10-20'
   ```
 
-- Check slots, items, etc.
+- Get slots containing an item:
 
   ```
-  print s.slotted(5)
-  >> True
+  s.get_slots()
+  >>> [<slotter.slotter.Slot object at 0x1>, <slotter.slotter.Slot object at 0x0>, <slotter.slotter.Slot at 0x2>]
+
+  s.get_slots(5)
+  >>> <slotter.slotter.Slot object at 0x1>
+
+  str(s.get_slots(5))
+  >>> '1-10'
+
+  str(s.get_slots(20))
+  >>> 'third'
   ```
 
-- Find the target slot of an item:
+- Get all the slotted items. Items are sorted. Because you may want to query on items - how many items > X?
 
   ```
-  target_slot = s.find_slot(5)
-  print str(target_slot.start)
-  >> 1
-  print str(target_slot.end)
-  >> 10
-  print str(target_slot)
-  >> 1-10
-  ```
+  # get all items
+  s.get_items()
+  >>> [5, 11, 20]
 
-  ```
-  target_slot = s.find_slot(11)
-  print str(target_slot.start)
-  >> 10
-  print str(target_slot.end)
-  >> 20
-  print 15 in target_slot
-  >> True
-  ```
+  # get items in a specific range
+  s.get_items(start=1, end=10)
+  >>> [5]
 
-- Get all slots
-
-  ```
-  print s.slots
-  >> [<slotter.slotter.Slot object at 0x7f1af93a7a90>, <slotter.slotter.Slot object at 0x7f1af93a7b50>]
-  ```
-
-- Get all items
-
-  ```
-  print s.items
-  >> [5, 11, 15]
+  # can also pass in a slot object
+  s.get_items(s.slots()[0])
+  >>> [11]
   ```
 
 - Map slots to items
 
   ```
-  print s.slot_items
-  >> {<slotter.slotter.Slot object at 0x7f1af93a7a90>: [5], <slotter.slotter.Slot object at 0x7f1af93a7b50>: [11, 15]}
+  s.slot_items
+  >>> {<slotter.slotter.Slot at 0x1>: sortedset([11]),
+  >>>  <slotter.slotter.Slot at 0x0>: sortedset([5]),
+  >>>  <slotter.slotter.Slot at 0x2>: sortedset([20])}
+  ```
+
+- Dump slot_items in human readable form
+
+  ```
+  s.dump()
+  >>> {'1-10': [5], '10-20': [11], 'third': [20]}
   ```
 
 - Map items to slots
 
   ```
-  print s.item_slots
-  >> {11: <slotter.slotter.Slot object at 0x7f1af93a7b50>, 5: <slotter.slotter.Slot object at 0x7f1af93a7a90>, 15: <slotter.slotter.Slot object at 0x7f1af93a7b50>}
+  s.item_slots
+  >>> {5: <slotter.slotter.Slot at 0x0>,
+  >>>  11: <slotter.slotter.Slot at 0x1>,
+  >>>  20: <slotter.slotter.Slot at 0x2}
   ```
 
-- json dump slot_items map:
+- Dump item_slots in human readable form
 
   ```
-  import json
-  print json.dumps(s.dump(), indent=2)
-  {
-    "1-10": [
-        5
-      ],
-    "10-20": [
-        11,
-        15
-      ]
-  }
-  ```
-
-- json dump item_slots map:
-
-  ```
-  import json
-  print json.dumps(s.dump(reverse=True), indent=2)
-  {
-    "11": "10-20",
-    "15": "10-20",
-    "5": "1-10"
-  }
+  s.dump(reverse=True)
+  >>> {'11': '10-20', '20': 'third', '5': '1-10'}
   ```

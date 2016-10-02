@@ -1,7 +1,7 @@
 import itertools
 import pytest
 import slotter
-from slotter.slotter import SlotterException
+from slotter.slotter import SlotterException, Slot
 
 @pytest.fixture(scope='session')
 def slotter_obj():
@@ -9,32 +9,91 @@ def slotter_obj():
   return slotter.Slotter()
 
 def test_create(slotter_obj):
+  """ Test slotter creation """
   assert isinstance(slotter_obj, slotter.Slotter)
 
-def test_add_slot(slotter_obj):
-  added = slotter_obj.add_slot(1, 10)
-  assert added
-  assert slotter_obj.slots[0].start == 1
-  assert slotter_obj.slots[0].end == 10
-  assert str(slotter_obj.slots[0]) == '1-10'
+def test_create_slot(slotter_obj):
+  """ Test slotter slot creation """
+  with pytest.raises(SlotterException):
+    slot_obj = slotter_obj.create_slot(100, 10)
 
-  added = slotter_obj.add_slot(10, 20)
-  assert added
-  assert slotter_obj.slots[1].start == 10
-  assert slotter_obj.slots[1].end == 20
-  assert str(slotter_obj.slots[1]) == '10-20'
+  with pytest.raises(SlotterException):
+    slot_obj = slotter_obj.create_slot(1, 1)
+
+  slot_obj = slotter_obj.create_slot(100, 200)
+  assert slot_obj.start == 100
+  assert slot_obj.end == 200
+
+def test_add_slot(slotter_obj):
+  """ Test slot creation """
+  slot_obj = slotter_obj.add_slot(1, 10)
+  assert slot_obj
+
+  slot_obj = slotter_obj.add_slot(10, 20)
+  assert slot_obj
+
+  slot_obj = slotter_obj.add_slot(20, 30, 'third')
+  assert slot_obj
+
+def test_remove_slot(slotter_obj):
+  """ Test slot removal """
+  slot_obj = slotter_obj.add_slot(30, 40)
+  assert slot_obj
+
+  removed = slotter_obj.remove_slot(slot_obj)
+  assert removed
+
+  removed = slotter_obj.remove_slot(Slot(100,200))
+  assert removed is False
 
 def test_add_item(slotter_obj):
-  slot = slotter_obj.add_item(15)
-  assert 15 in slot
+  """ Test adding item to a slot """
+  slot1 = slotter_obj.add_item(5)
+  assert slot1
 
-  slot = slotter_obj.add_item(5)
-  assert 5 in slot
+  slotter_obj.add_item(4)
+
+  slot2 = slotter_obj.add_item(15)
+  assert slot2
 
   slot = slotter_obj.add_item(-1)
-  assert slot is None
+  assert slot is False
+
+  items = slotter_obj.get_items()
+  assert items == [4, 5, 15]
+
+  items = slotter_obj.get_items(slot1)
+  assert items == [4, 5]
+
+  items = slotter_obj.get_items(start=1, end=10)
+  assert items == [4, 5]
+
+def test_remove_item(slotter_obj):
+  """ Test adding item to a slot """
+  slot = slotter_obj.add_item(19)
+  assert slot
+  removed = slotter_obj.remove_item(19)
+  assert removed
+
+  slot = slotter_obj.add_item(4)
+  assert slot
+  removed = slotter_obj.remove_item(4)
+  assert removed
+
+def test_get_slots(slotter_obj):
+  """ Test getting an item's slot """
+  all_slots = slotter_obj.get_slots()
+  assert len(all_slots) == 3 # from test_add_slot
+
+  slot = slotter_obj.get_slots(15)
+  assert slot.start == 10
+  assert slot.end == 20
+
+  slot = slotter_obj.get_slots(1000)
+  assert slot == []
 
 def test_duplicate_slots():
+  """ Test adding same slot twice """
   obj = slotter.Slotter()
 
   obj.add_slot(1,10)
@@ -44,30 +103,29 @@ def test_duplicate_slots():
   assert len(obj.slots) == 1
 
 def test_duplicate_items():
+  """ Test adding same item twice """
   obj = slotter.Slotter()
 
   obj.add_slot(1,10)
 
   obj.add_item(5)
-  assert len(obj.items) == 1
+  assert len(obj.item_slots.keys()) == 1
 
   obj.add_item(5)
-  assert len(obj.items) == 1
-
-def test_slotted(slotter_obj):
-  assert slotter_obj.slotted(15)
-  assert not slotter_obj.slotted(11)
+  assert len(obj.item_slots.keys()) == 1
 
 def test_dump(slotter_obj):
-  ds = slotter_obj.dump()
-  assert '1-10' in ds.keys()
-  assert '10-20' in ds.keys()
+  """ Test dumping slotter object """
+  output = slotter_obj.dump()
+  assert '1-10' in output.keys()
+  assert '10-20' in output.keys()
+  assert 'third' in output.keys()
 
-  assert 5 in list(itertools.chain(*ds.values()))
-  assert 15 in list(itertools.chain(*ds.values()))
+  assert 5 in list(itertools.chain(*output.values()))
+  assert 15 in list(itertools.chain(*output.values()))
 
-  ds = slotter_obj.dump(reverse=True)
-  assert '5' in ds.keys()
-  assert '15' in ds.keys()
-  assert '1-10' in ds.values()
-  assert '10-20' in ds.values()
+  output = slotter_obj.dump(reverse=True)
+  assert '5' in output.keys()
+  assert '15' in output.keys()
+  assert '1-10' in output.values()
+  assert '10-20' in output.values()
