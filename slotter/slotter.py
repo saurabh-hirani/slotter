@@ -36,7 +36,7 @@ class Slotter(object):
     else:
       self.slots = sortedset()
     self._str_slots = {}
-    self.items = sortedset()
+    self.items = sortedset(key = lambda x: x[1])
     self.item_slots = {}
     self.slot_items = {}
 
@@ -67,12 +67,13 @@ class Slotter(object):
   def _find_slot(self, item):
     """ Find the slot to which the item belongs """
     for slot in self.slots:
-      if slot.can_accomodate(item):
+      if slot.can_accomodate(item[1]):
         return slot
     return None
 
-  def add_item(self, item):
+  def add_item(self, name, value):
     """ Slot the item """
+    item = (name, value)
 
     if item in self.item_slots:
       return self.item_slots[item]
@@ -82,7 +83,7 @@ class Slotter(object):
       return False
 
     if slot not in self.slot_items:
-      self.slot_items[slot] = sortedset()
+      self.slot_items[slot] = sortedset(key=lambda x: x[1])
 
     self.slot_items[slot].add(item)
     self.item_slots[item] = slot
@@ -90,11 +91,13 @@ class Slotter(object):
 
     return self.item_slots[item]
 
-  def remove_item(self, item):
+  def remove_item(self, name, value):
     """ Remove the slotted item """
+    item = (name, value)
     if item not in self.item_slots:
       return False
     self.slot_items[self.item_slots[item]].remove(item)
+    del self.item_slots[item]
     self.items.remove(item)
     return True
 
@@ -115,8 +118,11 @@ class Slotter(object):
 
     return ds
 
-  def get_slots(self, item=None):
+  def get_slots(self, name=None, value=None):
     """ Get the slot of an item """
+    item = None
+    if name is not None and value is not None:
+      item = (name, value)
     if item is None:
       return list(self.slots)
     if item in self.item_slots:
@@ -129,9 +135,12 @@ class Slotter(object):
       return list(self.items)
 
     if slot is not None:
-      return list(self.slot_items[slot])
+      if slot in self.slot_items:
+        return list(self.slot_items[slot])
     else:
       if start is not None and end is not None:
         key = '%s-%s' % (str(start), str(end))
-        return list(self.slot_items[self._str_slots[key]])
+        if key in self._str_slots:
+          slot = self._str_slots[key]
+          return list(self.slot_items[slot])
     return []

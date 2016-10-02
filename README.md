@@ -58,7 +58,7 @@ e.g. X services were in WARNING state for 1-2 hours.
   >>> <slotter.slotter.Slot at 0x2>
 
   # an optional description to label the slots
-  s.add_slot(20, 30, 'third')
+  s.add_slot(20, 30, 'twenty-to-thirty')
   >>> <slotter.slotter.Slot at 0x3>
   ```
 
@@ -73,10 +73,10 @@ e.g. X services were in WARNING state for 1-2 hours.
 
   ```
   s.dump()
-  >>> {'1-10': [], '10-20': [], 'third': []} # printed 'third' because we labelled (20, 30) range explicitly
+  >>> {'1-10': [], '10-20': [], 'twenty-to-thirty': []} # printed 'twenty-to-thirty' because we labelled (20, 30) range explicitly
   ```
 
-- Get properties of a sample slot
+ Get properties of a sample slot
 
   ```
   s.slots[0].start
@@ -88,17 +88,17 @@ e.g. X services were in WARNING state for 1-2 hours.
 - Add items. Slots chosen as per item >= slot.start and item < slot.end. Output is the slot in which items are added
 
   ```
-  s.add_item(5)
+  s.add_item('item1', 5)
   >>> <slotter.slotter.Slot object at 0x1>
 
-  s.add_item(20)
+  s.add_item('item2', 20)
   >>> <slotter.slotter.Slot object at 0x3>
 
-  slot = s.add_item(11)
+  slot = s.add_item('item3', 11)
   >>> <slotter.slotter.Slot object at 0x2>
 
   # add same item again is idempotent
-  slot = s.add_item(11)
+  slot = s.add_item('item3', 11)
   >>> <slotter.slotter.Slot object at 0x2>
 
   # 0x2 == slot with range (10,20) - not explicitly labelled => label == 'start-end'
@@ -112,14 +112,14 @@ e.g. X services were in WARNING state for 1-2 hours.
   s.get_slots()
   >>> [<slotter.slotter.Slot object at 0x1>, <slotter.slotter.Slot object at 0x0>, <slotter.slotter.Slot at 0x2>]
 
-  s.get_slots(5)
+  s.get_slots('item1', 5)
   >>> <slotter.slotter.Slot object at 0x1>
 
-  str(s.get_slots(5))
+  str(s.get_slots('item1', 5))
   >>> '1-10'
 
-  str(s.get_slots(20))
-  >>> 'third'
+  str(s.get_slots('item2', 20))
+  >>> 'twenty-to-thirty'
   ```
 
 - Get all the slotted items. Items are sorted. Because you may want to query on items - how many items > X?
@@ -127,47 +127,51 @@ e.g. X services were in WARNING state for 1-2 hours.
   ```
   # get all items
   s.get_items()
-  >>> [5, 11, 20]
+  >>> [('item1', 5), ('item3', 11), ('item2', 20)]
 
   # get items in a specific range
   s.get_items(start=1, end=10)
-  >>> [5]
+  >>> [('item1', 5)]
 
   # can also pass in a slot object
   s.get_items(s.slots()[0])
-  >>> [11]
+  >>> [('item3', 11)]
   ```
 
 - Map slots to items
 
   ```
   s.slot_items
-  >>> {<slotter.slotter.Slot at 0x1>: sortedset([11]),
-  >>>  <slotter.slotter.Slot at 0x0>: sortedset([5]),
-  >>>  <slotter.slotter.Slot at 0x2>: sortedset([20])}
+  >>> {<slotter.slotter.Slot at 0x1>: sortedset([('item3', 11)]),
+  >>>  <slotter.slotter.Slot at 0x0>: sortedset([('item1', 5)]),
+  >>>  <slotter.slotter.Slot at 0x2>: sortedset([('item2', 20)])}
   ```
 
 - Dump slot_items in human readable form
 
   ```
   s.dump()
-  >>> {'1-10': [5], '10-20': [11], 'third': [20]}
+  >>> {'1-10': [('item1', 5)],
+       '10-20': [('item3', 11)],
+       'twenty-to-thirty': [('item2', 20)]}
   ```
 
 - Map items to slots
 
   ```
   s.item_slots
-  >>> {5: <slotter.slotter.Slot at 0x0>,
-  >>>  11: <slotter.slotter.Slot at 0x1>,
-  >>>  20: <slotter.slotter.Slot at 0x2}
+  >>> {('item1', 5): <slotter.slotter.Slot at 0x7fb7805c2c90>,
+       ('item2', 20): <slotter.slotter.Slot at 0x7fb7805c2d90>,
+       ('item3', 11): <slotter.slotter.Slot at 0x7fb7805c2c50>}
   ```
 
 - Dump item_slots in human readable form
 
   ```
   s.dump(reverse=True)
-  >>> {'11': '10-20', '20': 'third', '5': '1-10'}
+  >>> {"('item1', 5)": '1-10',
+   "('item2', 20)": 'twenty-to-thirty',
+   "('item3', 11)": '10-20'}
   ```
 
-
+- See more code examples in the ```tests/``` directory
