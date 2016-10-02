@@ -171,4 +171,55 @@ e.g. X services were in WARNING state for 1-2 hours.
    "('item3', 11)": '10-20'}
   ```
 
-- See more code examples in the ```tests/``` directory
+- 'Tie it all together' use case - Find the no. of items beyond a particular slot.
+
+  ```
+  import slotter
+
+  s = slotter.create()
+
+  s.add_slot(30, 60, '30-60 minutes')
+
+  s.add_slot(10, 30, '10-30 minutes')
+
+  s.add_slot(60, 90, '60-90 minutes')
+
+  s.add_slot(1, 10, '1-10 minutes')
+
+  s.add_item('item1', 23)
+
+  s.add_item('item2', 10)
+
+  s.add_item('item3', 15)
+
+  s.add_item('item4', 71)
+
+  s.add_item('item5', 54)
+
+  s.add_item('item6', 19)
+
+  s.add_item('item7', 44)
+
+  print [str(x) for x in s.get_slots()]
+  >>> ['1-10 minutes', '10-30 minutes', '30-60 minutes', '60-90 minutes']
+
+  print [x for x in s.get_items()]
+  >>> [('item2', 10), ('item3', 15), ('item6', 19), ('item1', 23), ('item7', 44), ('item5', 54), ('item4', 71)]
+
+  all_slots = s.get_slots()
+
+  target_slot = s.get_slots('item2', 10)
+
+  target_slot_idx = all_slots.index(target_slot)
+
+  print [s.get_items(x) for x in all_slots[target_slot_idx + 1:]]
+  >>> [[('item7', 44), ('item5', 54)], [('item4', 71)]]
+
+  print [len(s.get_items(x)) for x in all_slots[target_slot_idx + 1:]]
+  >>> [2, 1]
+
+  print sum((len(s.get_items(x)) for x in all_slots[target_slot_idx + 1:]))
+  >>> 3
+  ```
+
+- See more code examples in the ```slotter/tests/``` directory
