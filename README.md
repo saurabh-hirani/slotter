@@ -17,12 +17,17 @@ e.g. X services were in WARNING state for 1-2 hours.
 ### Installation
 
 * stable release: ```pip install slotter```
-* ongoing development package:
+* Install the ongoing development package:
 
-  ```bash
+  ```
   git clone https://github.com/saurabh-hirani/slotter
   cd slotter
   sudo ./install.sh
+  ```
+* Remove files installed by ```./install.sh```
+
+  ```
+  sudo ./uninstall.sh
   ```
 
 ### Examples
