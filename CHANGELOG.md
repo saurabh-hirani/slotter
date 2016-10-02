@@ -17,3 +17,7 @@
 ### v0.0.4
 
 - Sort slots based on sum of start + end so that get_slots() returns a sorted list
+
+### v0.0.5
+
+- Taking version from version.py
