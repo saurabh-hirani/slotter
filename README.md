@@ -58,8 +58,14 @@ e.g. X services were in WARNING state for 1-2 hours.
   >>> <slotter.slotter.Slot at 0x2>
 
   # an optional description to label the slots
-  s.add_slot(20, 30, 'twenty-to-thirty')
+  slot = s.add_slot(20, 30, 'twenty-to-thirty')
   >>> <slotter.slotter.Slot at 0x3>
+
+  slot.start
+  >>> 20
+
+  slot.end
+  >>> 30
   ```
 
 - Dump the empty slot objects. Returns a sorted list. Slots are sorted on the sum of start + end i.e. slot(1, 10) <  slot(10, 20)
@@ -74,15 +80,6 @@ e.g. X services were in WARNING state for 1-2 hours.
   ```
   s.dump()
   >>> {'1-10': [], '10-20': [], 'twenty-to-thirty': []} # printed 'twenty-to-thirty' because we labelled (20, 30) range explicitly
-  ```
-
- Get properties of a sample slot
-
-  ```
-  s.slots[0].start
-  >>> 10
-  s.slots[0].end
-  >>> 20
   ```
 
 - Add items. Slots chosen as per item >= slot.start and item < slot.end. Output is the slot in which items are added
