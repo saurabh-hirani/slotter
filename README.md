@@ -14,7 +14,7 @@ Talk to your monitoring setup's API. Find out how many services are in warning/c
 
 e.g. X services were in WARNING state for 1-2 hours.
 
-[This](https://github.com/saurabh-hirani/graphite-plugins/tree/master/icinga2_plugins) repo shows an application of this use case for icinga2 as the monitoring system and graphite as the graphing system.
+[This](http://saurabh-hirani.github.io/writing/2016/10/03/sla-metrics) blog post describes the above scenario and links to the graphite plugin which does the deed.
 
 ### Installation
 
