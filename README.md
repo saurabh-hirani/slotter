@@ -122,7 +122,7 @@ e.g. X services were in WARNING state for 1-2 hours.
   >>> 'twenty-to-thirty'
   ```
 
-- Get all the slotted items. Returns a sorted list.
+- Get all the slotted items. Returns a sorted list. Items are sorted on the basis of their values i.e. ('item5', 10) < ('item4', 50)
 
   ```
   # get all items
