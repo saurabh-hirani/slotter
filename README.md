@@ -84,7 +84,7 @@ e.g. X services were in WARNING state for 1-2 hours.
   >>> {'1-10': [], '10-20': [], 'twenty-to-thirty': []} # printed 'twenty-to-thirty' because we labelled (20, 30) range explicitly
   ```
 
-- Add items. Slots chosen as per item >= slot.start and item < slot.end. Output is the slot in which items are added
+- Add items. Item are in the format - (item_name, its_slot_value). Slots chosen as per item_value >= slot.start and item_value < slot.end. Output is the slot in which items are added.
 
   ```
   s.add_item('item1', 5)
