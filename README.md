@@ -14,7 +14,16 @@ Talk to your monitoring setup's API. Find out how many services are in warning/c
 
 e.g. X services were in WARNING state for 1-2 hours.
 
-### Installation - TODO
+### Installation
+
+* stable release: ```pip install slotter```
+* ongoing development package:
+
+  ```bash
+  git clone https://github.com/saurabh-hirani/slotter
+  cd slotter
+  sudo ./install.sh
+  ```
 
 ### Examples
 
@@ -155,3 +164,5 @@ e.g. X services were in WARNING state for 1-2 hours.
   s.dump(reverse=True)
   >>> {'11': '10-20', '20': 'third', '5': '1-10'}
   ```
+
+

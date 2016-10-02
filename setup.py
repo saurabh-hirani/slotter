@@ -9,7 +9,8 @@ setup(
   author_email='saurabh.hirani@gmail.com',
   packages=find_packages(),
   install_requires=[
-    'blist'
+    'blist',
+    'pytest'
   ],
   entry_points = {}
 )
