@@ -1,8 +1,9 @@
 from setuptools import setup, find_packages
+exec(open('slotter/version.py').read())
 setup(
   name='slotter',
   license='MIT',
-  version='0.0.4',
+  version=__version__,
   url='https://github.com/saurabh-hirani/slotter',
   description=('Python library to slot stuff'),
   author='Saurabh Hirani',
