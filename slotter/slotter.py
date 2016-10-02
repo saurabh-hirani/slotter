@@ -119,7 +119,7 @@ class Slotter(object):
     return ds
 
   def get_slots(self, name=None, value=None):
-    """ Get the slot of an item """
+    """ Get slots """
     item = None
     if name is not None and value is not None:
       item = (name, value)
@@ -130,7 +130,7 @@ class Slotter(object):
     return []
 
   def get_items(self, slot=None, start=None, end=None):
-    """ Get all items """
+    """ Get slot items """
     if slot is None and start is None and end is None:
       return list(self.items)
 
