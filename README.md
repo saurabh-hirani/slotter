@@ -12,7 +12,7 @@ A slotter can add/remove items/slots and can also search items/slots for slots/i
 
 ### Play me a sample run
 
-[![asciicast](https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8.png)](https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8)
+<a href='https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8?autoplay=1' target='_blank'><img src='https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8.png'></a>
 
 ### Why?
 
