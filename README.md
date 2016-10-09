@@ -6,7 +6,7 @@ A slotter slots items.
 
 An item can be a primitive (int, str) or an object which either has the attributes **name, value** or implements the methods **get_item_name, get_item_value**
 
-A slot can hold one or more item. An item can belong to only one slot.
+A slot can hold one or more items. An item can belong to only one slot.
 
 A slotter can add/remove items/slots and can also search items/slots for slots/items.
 
@@ -56,4 +56,4 @@ e.g. X services were in WARNING state for 1-2 hours.
   # sample code run output
   ```
 
-- More code in ```slotter/tests``` dir
+- More sample code in [test_slotter.py](https://github.com/saurabh-hirani/slotter/blob/master/slotter/tests/test_slotter.py)
