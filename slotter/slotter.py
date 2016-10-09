@@ -2,29 +2,9 @@
 """ The main class of slotter """
 
 from blist import sortedset
-
-class SlotterException(Exception):
-  pass
-
-class Slot(object):
-  """ That which contains items """
-  def __init__(self, start, end, desc=None):
-    if start > end or start == end:
-      raise SlotterException('ERROR: Invalid start - %s, end - %s' % (start, end))
-
-    self.start = start
-    self.end = end
-    if desc is None:
-      desc = '%s-%s' % (str(self.start), str(self.end))
-    self.desc = desc
-
-  def __str__(self):
-    return self.desc
-
-  def can_accomodate(self, item):
-    if item >= self.start and item < self.end:
-      return True
-    return False
+from slot import Slot
+from item import Item
+import utils
 
 class Slotter(object):
   """ Slotter class """
@@ -35,14 +15,24 @@ class Slotter(object):
     if slots is not None:
       for slot in slots:
         self.slots.add(slot)
-    self._str_slots = {}
-    self.items = sortedset(key = lambda x: x[1])
-    self.item_slots = {}
+    self.verbose = False
+
     self.slot_items = {}
+    self.item_slots = {}
+
+    # prevent duplicate slots and items by remembering their string rep
+    self._str_slots = {}
+    self._str_items = {}
+
+    self.items = sortedset(key = lambda x: x.value)
 
   def create_slot(self, start, end, desc=None):
     """ Just create a slot object - don't add it """
     return Slot(start, end, desc)
+
+  def create_item(self, item):
+    """ Just create a item object - don't slot it """
+    return Item(item)
 
   def add_slot(self, start, end, desc=None):
     """ Define start, end for a slot """
@@ -60,6 +50,8 @@ class Slotter(object):
     """ Define start, end for a slot """
     if slot_obj not in self.slots:
       return False
+    for item in slot_obj.items:
+      self.remove_item(item)
     self.slots.remove(slot_obj)
     del self._str_slots[str(slot_obj)]
     return True
@@ -67,38 +59,63 @@ class Slotter(object):
   def _find_slot(self, item):
     """ Find the slot to which the item belongs """
     for slot in self.slots:
-      if slot.can_accomodate(item[1]):
+      if slot.can_accomodate(item):
         return slot
     return None
 
-  def add_item(self, name, value):
-    """ Slot the item """
-    item = (name, value)
+  def _find_item_by_name_value(self, name, value):
+    """ Find item by its name and value """
+    key = '%s-%s' % (str(name), str(value))
+    if key in self._str_items:
+      item = self._str_items[key]
+      return item
+    return None
 
-    if item in self.item_slots:
-      return self.item_slots[item]
+  def add_item(self, item):
+    """ Slot the item """
+    if not isinstance(item, Item):
+      item = self.create_item(item)
+
+    if str(item) in self._str_items:
+      return self._str_items[str(item)]
 
     slot = self._find_slot(item)
     if slot is None:
+      if self.verbose:
+        print 'ERROR: Did not find a slot - existing slots - %s' % self.dump().keys()
       return False
 
     if slot not in self.slot_items:
-      self.slot_items[slot] = sortedset(key=lambda x: x[1])
+      self.slot_items[slot] = sortedset(key=lambda x: x.value)
+
+    self.items.add(item)
+    slot.items.add(item)
+    self._str_items[str(item)] = item
 
     self.slot_items[slot].add(item)
     self.item_slots[item] = slot
-    self.items.add(item)
 
-    return self.item_slots[item]
+    item.slot = slot
 
-  def remove_item(self, name, value):
+    return item
+
+  def remove_item(self, item=None, name=None, value=None):
     """ Remove the slotted item """
-    item = (name, value)
-    if item not in self.item_slots:
+    if item is None and name is not None and value is not None:
+      item = self._find_item_by_name_value(name, value)
+
+    if item is None or item not in self.item_slots:
       return False
-    self.slot_items[self.item_slots[item]].remove(item)
-    del self.item_slots[item]
+
+    slot = self.item_slots[item]
+
+    slot.items.remove(item)
+    self.slot_items[slot].remove(item)
+    del self._str_items[str(item)]
+
     self.items.remove(item)
+    del self.item_slots[item]
+
     return True
 
   def dump(self, reverse=False):
@@ -110,7 +127,9 @@ class Slotter(object):
         if str_slot not in ds:
           ds[str_slot] = []
         if slot in self.slot_items:
-          ds[str_slot].extend(self.slot_items[slot])
+          items = self.slot_items[slot]
+          for item in items:
+            ds[str_slot].append((item.name, item.value))
       return ds
 
     for item in self.item_slots.keys():
@@ -118,16 +137,17 @@ class Slotter(object):
 
     return ds
 
-  def get_slots(self, name=None, value=None):
+  def get_slot(self, item=None, name=None, value=None):
     """ Get slots """
-    item = None
-    if name is not None and value is not None:
-      item = (name, value)
+    if item is None and name is not None and value is not None:
+      item = self._find_item_by_name_value(name, value)
+    if not isinstance(item, Item):
+      item = self.create_item(item)
     if item is None:
-      return list(self.slots)
-    if item in self.item_slots:
-      return self.item_slots[item]
-    return []
+      return None
+    if str(item) in self._str_items:
+      return self.item_slots[self._str_items[str(item)]]
+    return None
 
   def get_items(self, slot=None, start=None, end=None):
     """ Get slot items """
@@ -143,4 +163,5 @@ class Slotter(object):
         if key in self._str_slots:
           slot = self._str_slots[key]
           return list(self.slot_items[slot])
+
     return []

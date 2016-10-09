@@ -21,3 +21,7 @@
 ### v0.0.5
 
 - Taking version from version.py
+
+### v0.0.6
+
+- Breaking change - Creating item class and changing the way items are added/searched/removed.
