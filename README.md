@@ -10,6 +10,10 @@ A slot can hold one or more item. An item can belong to only one slot.
 
 A slotter can add/remove items/slots and can also search items/slots for slots/items.
 
+### Play me a sample run
+
+[![asciicast](https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8.png)](https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8)
+
 ### Why?
 
 Scratching my own itch.
