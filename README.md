@@ -10,7 +10,7 @@ A slot can hold one or more items. An item can belong to only one slot.
 
 A slotter can add/remove items/slots and can also search items/slots for slots/items.
 
-### Play me a sample run
+### Play me a sample run / Slot Terminator, Pacific Rim and Transformers
 
 <a href='https://asciinema.org/a/8mm8f0qqurk4rqt90drkpvp1b?autoplay=1' target='_blank'><img src='https://asciinema.org/a/8mm8f0qqurk4rqt90drkpvp1b.png'></a>
 
