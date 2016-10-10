@@ -12,7 +12,7 @@ A slotter can add/remove items/slots and can also search items/slots for slots/i
 
 ### Play me a sample run
 
-<a href='https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8?autoplay=1' target='_blank'><img src='https://asciinema.org/a/2wttc358zdx1mg1wkh4t7tcg8.png'></a>
+<a href='https://asciinema.org/a/8mm8f0qqurk4rqt90drkpvp1b?autoplay=1' target='_blank'><img src='https://asciinema.org/a/8mm8f0qqurk4rqt90drkpvp1b.png'></a>
 
 ### Why?
 
@@ -46,14 +46,16 @@ e.g. X services were in WARNING state for 1-2 hours.
 
 ### Usage
 
+* Sample code present in [sample.py](https://github.com/saurabh-hirani/slotter/blob/master/slotter/sample.py)
+
+* If you have ```slotter``` installed:
+
   ```
   >>> import inspect, slotter.sample
-  >>> slotter.sample.__file__
-  # the location of the sample code
   >>> print inspect.getsource(slotter.sample.main)
   # the sample code
   >>> slotter.sample.main()
   # sample code run output
   ```
 
-- More sample code in [test_slotter.py](https://github.com/saurabh-hirani/slotter/blob/master/slotter/tests/test_slotter.py)
+* Tests cover a lot of sample code - [test_slotter.py](https://github.com/saurabh-hirani/slotter/blob/master/slotter/tests/test_slotter.py)
