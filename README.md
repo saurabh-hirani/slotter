@@ -6,7 +6,7 @@ A slotter slots items.
 
 An item can be a primitive (int, str) or an object which either has the attributes **name, value** or implements the methods **get_item_name, get_item_value**
 
-A slot can hold one or more items. An item can belong to only one slot.
+A slot has a start and an end value e.g start=1 end=10 for holding items >= 1 and < 10. It can hold one or more items. An item can belong to only one slot.
 
 A slotter can add/remove items/slots and can also search items/slots for slots/items.
 
