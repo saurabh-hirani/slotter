@@ -30,11 +30,15 @@ e.g. X services were in WARNING state for 1-2 hours.
 
 ### Installation
 
-* stable release: ```pip install slotter```
-* Install the ongoing development package:
+* To install a stable release:
+
+  ```pip install slotter```
+
+* To install the development package:
 
   ```
   git clone https://github.com/saurabh-hirani/slotter
+  pip install -r requirements.txt
   cd slotter
   sudo ./install.sh
   ```
